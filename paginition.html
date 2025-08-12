@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="paginition.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f8f8;
+        }
+        .paginition {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+        .paginition button {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border: none;
+            background: #007bff;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .paginition button.active {
+            background: #0056b3;
+            font-weight: bold;
+        }
+        .paginition button:disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+        }
+        .page {
+            display: none;
+            max-width: 600px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-size: 1.2rem;
+        }
+        @media (max-width: 600px) {
+            .paginition button {
+                font-size: 0.9rem;
+                padding: 0.4rem 0.7rem;
+            }
+            .page {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>   
+    
+    <div id="page1" class="page">
+        <h2>Featured Media Collection</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+            <div style="flex: 1 1 200px; max-width: 250px; background: #f0f0f0; border-radius: 6px; padding: 1rem; text-align: center;">
+                <video width="100%" controls poster="https://via.placeholder.com/250x140?text=Video+1">
+                    <source src="family%20guy/Family_Guy_360P_S10_EP10.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p>Family Guy S10E10</p>
+            </div>
+            <div style="flex: 1 1 200px; max-width: 250px; background: #f0f0f0; border-radius: 6px; padding: 1rem; text-align: center;">
+                <video width="100%" controls poster="https://via.placeholder.com/250x140?text=Video+2">
+                    <source src="cleveland%20show/Hot_Cocoa_Bang_Bang_S02_EP22.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p>Cleveland Show S02E22</p>
+            </div>
+            <div style="flex: 1 1 200px; max-width: 250px; background: #f0f0f0; border-radius: 6px; padding: 1rem; text-align: center;">
+                <img src="https://via.placeholder.com/250x140?text=Image+1" alt="Sample Image 1" style="width:100%; border-radius:4px;">
+                <p>Show Poster</p>
+            </div>
+            <div style="flex: 1 1 200px; max-width: 250px; background: #f0f0f0; border-radius: 6px; padding: 1rem; text-align: center;">
+                <img src="https://via.placeholder.com/250x140?text=Image+2" alt="Sample Image 2" style="width:100%; border-radius:4px;">
+                <p>Behind the Scenes</p>
+            </div>
+        </div>
+    </div>
+    <div id="page2" class="page"> page 2 shows... </div>
+    <div id="page3" class="page"> page 3 shows... </div>
+    <div id="page4" class="page"> page 4 shows... </div>
+    <div id="page5" class="page"> page 5 shows... </div>
+    
+    <div class="paginition">
+        <button onclick="showPage('page1')"> << </button>
+        <button onclick="changePage(-1)"> < </button>
+        <button onclick="showPage('page1')">1</button>
+        <button onclick="showPage('page2')">2</button>
+        <button onclick="showPage('page3')">3</button>
+        <button onclick="showPage('page4')">4</button>
+        <button onclick="showPage('page5')">5</button>
+        <button onclick="changePage(1)"> > </button>
+        <button onclick="showPage('page5')"> >> </button>
+    </div>
+
+
+
+<script>
+
+   let currentPage = 1;
+   const totalPages = 5;
+
+   function showPage(pageId) {
+       const pages = document.querySelectorAll('.page');
+       pages.forEach(page => {
+           page.style.display = 'none';
+       });
+       document.getElementById(pageId).style.display = 'block';
+       // Update currentPage based on the pageId
+       const match = pageId.match(/page(\d+)/);
+       if (match) {
+           currentPage = parseInt(match[1]);
+       }
+       updateActiveButton();
+       updateNavButtons();
+   }
+
+   function changePage(direction) {
+       let newPage = currentPage + direction;
+       if (newPage < 1) newPage = 1;
+       if (newPage > totalPages) newPage = totalPages;
+       showPage('page' + newPage);
+   }
+
+   function updateActiveButton() {
+       const btns = document.querySelectorAll('.paginition button');
+       btns.forEach(btn => btn.classList.remove('active'));
+       if (btns.length >= 8) {
+           // 3rd to 7th buttons are page numbers
+           btns[currentPage + 1].classList.add('active');
+       }
+   }
+
+   function updateNavButtons() {
+       const btns = document.querySelectorAll('.paginition button');
+       // Disable prev/first if on first page
+       btns[0].disabled = currentPage === 1;
+       btns[1].disabled = currentPage === 1;
+       // Disable next/last if on last page
+       btns[7].disabled = currentPage === totalPages;
+       btns[8].disabled = currentPage === totalPages;
+   }
+
+   window.onload = function() {
+       showPage('page1');
+   }
+
+</script>
+</body>
+</html>
